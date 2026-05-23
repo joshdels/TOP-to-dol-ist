@@ -1,0 +1,10 @@
+-- STRUCTURE
+CLASS PROJECTS
+CLASS Todos
+  edits details
+  see details
+  delete todo
+
+Creates Projects, then have a todo? foreign key lol?
+
+then local storage
