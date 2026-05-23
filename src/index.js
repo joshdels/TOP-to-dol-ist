@@ -1,14 +1,14 @@
+import { renderProjects } from "./DOM/project.js";
 import { TodoList, ProjectList, Project, Todo } from "./objects/class.js";
 import "./styles.css";
 
-console.log("hello");
 
-const newTodo = new Todo("Buy milk", "Im buying milk", "project");
-newTodo.storeTodo();
+// Project
+// const defaultProject = new Project("1 Week")
+// defaultProject.storeProject();
+// const defaultProject2 = new Project("2 Week")
+// defaultProject2.storeProject();
 
-console.log("Before delete:",(TodoList)); 
+console.log(ProjectList)
 
-Todo.editTodo(TodoList[0].id, "Hello", "NewDescriptoin", "NewDate", "NewProject")
-
-
-console.log("Edit:", (TodoList));
+renderProjects()

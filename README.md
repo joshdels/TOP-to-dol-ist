@@ -21,3 +21,8 @@ npm install --save-dev wepback webpack-cli html-wepback-plugin styles-loader css
 npx webpack
 npx webpack serve
 ```
+
+---
+### What I learn 
+1. Classes/Objects to organize the code
+2. Less Couple to avoid reliance to other modules, let the main handle it all
