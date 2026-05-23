@@ -1,71 +1,116 @@
-import { ProjectList, Project } from "../objects/class.js";
+import { ProjectList, Project, TodoList } from "../objects/class.js";
+import { renderProjectTodo, setupNewTask } from "./todo.js";
 
 export function renderProjects() {
-  const sidebar = document.querySelector("aside");
-  sidebar.innerHTML = "<h1>Projects</h1>";
+  const projectContainer = document.querySelector("#projects");
 
+  projectContainer.innerHTML = "";
 
   if (ProjectList.length === 0) {
-
-    const project = document.createElement("span");
-    project.innerHTML = `
-    <h2>No Project Mate?</h2> 
-    <button id="new-project">New Project</button>
-    `;
-    sidebar.append(project);
+    projectContainer.innerHTML = `<p>No Projects</p>`;
+    return;
   }
 
   ProjectList.forEach((item) => {
-    const newProject = document.createElement("span");
-    newProject.innerHTML = `
-      <button>${item.name}</button>
-      `;
-    sidebar.appendChild(newProject);
-  });
+    const project = document.createElement("div");
 
-  newProject();
+    project.innerHTML = `
+      <button data-id="${item.id}">
+        ${item.name}
+      </button>
+    `;
+
+    projectContainer.appendChild(project);
+  });
 }
 
-export function newProject() {
+export function setupNewProject() {
   const projectButton = document.querySelector("#new-project");
 
   if (!projectButton) return;
 
   projectButton.addEventListener("click", () => {
-    const dialog = document.createElement("dialog");
+    openProjectDialog();
+  });
+}
 
-    dialog.innerHTML = `
-      <h2>Create Project</h2>
+function openProjectDialog() {
+  const dialog = document.createElement("dialog");
 
-      
-      <input id="name" type="text" placeholder="Project Name" />
+  dialog.innerHTML = `
+    <h2>New Project</h2>
 
+    <input id="name" type="text" placeholder="Project Name" />
+
+    <div>
+      <button type="button" id="create-btn">Create</button>
+      <button type="button" id="close-btn">Close</button>
+    </div>
+  `;
+
+  document.body.appendChild(dialog);
+
+  dialog.showModal();
+
+  dialog.querySelector("#close-btn").addEventListener("click", () => {
+    dialog.close();
+    dialog.remove();
+  });
+
+  dialog.querySelector("#create-btn").addEventListener("click", () => {
+    const name = dialog.querySelector("#name").value;
+
+    const project = new Project(name);
+    project.storeProject();
+
+    dialog.close();
+    dialog.remove();
+
+    renderProjects();
+  });
+}
+
+export function setupProjectDetails() {
+  const projectContainer = document.querySelector("#projects");
+  const content = document.querySelector("#content");
+
+  projectContainer.addEventListener("click", (e) => {
+    if (e.target.tagName !== "BUTTON") return;
+
+    const id = e.target.dataset.id;
+
+    const project = ProjectList.find((p) => p.id === id);
+
+    if (!project) return;
+
+    content.innerHTML = `
       <div>
-        <button id="create-btn">Create</button>
-        <button id="close-btn">Close</button>
+        <h1>${project.name}</h1>
+        <span>${project.date}</span>
+        <button id="delete-project">delete</button>
+        <button id="edit-project">edit</button>
       </div>
+
+      <button id="add-task-btn">
+        Add Task
+      </button>
+
+      <div id="todo-list"></div>
     `;
 
-    document.body.appendChild(dialog);
+    setupNewTask(id);
 
-    dialog.showModal();
-
-    const closeBtn = dialog.querySelector("#close-btn");
-    closeBtn.addEventListener("click", () => {
-      dialog.close();
-    });
-
-    const createBtn = dialog.querySelector("#create-btn");
-
-    createBtn.addEventListener("click", () => {
-      const name = dialog.querySelector("#name").value;
-
-      const projectName = new Project(name);
-      projectName.storeProject();
-
-      dialog.close();
+    const deleteBtn = document.getElementById("delete-project");
+    deleteBtn.addEventListener("click", () => {
+      Project.deleteProject(id);
 
       renderProjects();
+      content.innerHTML = "";
+    });
+
+    const editBtn = document.getElementById("edit-project");
+    editBtn.addEventListener("click", () => {
+      console.log("edit to finish");
     });
   });
 }

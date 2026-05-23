@@ -26,16 +26,23 @@ export class Project {
     if (index !== -1) {
       ProjectList.splice(index, 1);
     }
+
+    TodoList = TodoList.filter((todo) => {
+      todo.projectId !== id;
+    });
+
+    console.log(TodoList)
   }
 }
 
 export class Todo {
-  constructor(name, description, project) {
+  constructor(name, description, projectName, projectId) {
     this.id = crypto.randomUUID();
     this.name = name;
     this.date = format(new Date(), "MMM d, yyyy");
     this.description = description;
-    this.project = project;
+    this.projectName = projectName;
+    this.projectId = projectId;
   }
 
   storeTodo() {
