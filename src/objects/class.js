@@ -3,6 +3,24 @@ import { format } from "date-fns";
 export let ProjectList = [];
 export let TodoList = [];
 
+export function loadLocalData() {
+  const projectData = localStorage.getItem("projectData");
+  const todoData = localStorage.getItem("todoData");
+
+  if (projectData) {
+    ProjectList = JSON.parse(projectData);
+  }
+
+  if (todoData) {
+    TodoList = JSON.parse(todoData);
+  }
+}
+
+export function saveLocalData() {
+  localStorage.setItem("projectData", JSON.stringify(ProjectList));
+  localStorage.setItem("todoData", JSON.stringify(TodoList));
+}
+
 export class Project {
   constructor(name) {
     this.id = crypto.randomUUID();
@@ -12,6 +30,7 @@ export class Project {
 
   storeProject() {
     ProjectList.push(this);
+    saveLocalData();
   }
 
   static editProject(id, newName) {
@@ -19,6 +38,7 @@ export class Project {
     if (ProjectList[index]) {
       ProjectList[index].name = newName;
     }
+    saveLocalData();
   }
 
   static deleteProject(id) {
@@ -30,6 +50,8 @@ export class Project {
     TodoList = TodoList.filter((todo) => {
       return todo.projectId !== id;
     });
+
+    saveLocalData();
   }
 }
 
@@ -47,6 +69,7 @@ export class Todo {
 
   storeTodo() {
     TodoList.push(this);
+    saveLocalData();
   }
 
   static editTodo(
@@ -65,11 +88,12 @@ export class Todo {
       todoItem.name = newName;
       todoItem.date = newDate;
       todoItem.description = newDescription;
-      todoItem.project = newProject;
+      todoItem.projectName = newProject;
       todoItem.projectId = newProjectId;
       todoItem.isDone = isDone;
       todoItem.priority = priority;
     }
+    saveLocalData();
   }
 
   static deleteTodo(id) {
@@ -77,5 +101,6 @@ export class Todo {
     if (index !== -1) {
       TodoList.splice(index, 1);
     }
+    saveLocalData();
   }
 }
