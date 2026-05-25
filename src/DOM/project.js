@@ -83,34 +83,80 @@ export function setupProjectDetails() {
 
     if (!project) return;
 
-    content.innerHTML = `
-      <div>
-        <h1>${project.name}</h1>
-        <span>${project.date}</span>
-        <button id="delete-project">delete</button>
-        <button id="edit-project">edit</button>
-      </div>
-
-      <button id="add-task-btn">
-        Add Task
-      </button>
-
-      <div id="todo-list"></div>
-    `;
+    renderProjectDetails(project, id);
 
     setupNewTask(id);
+  });
+}
+function renderProjectDetails(project, id) {
+  const content = document.querySelector("#content");
 
-    const deleteBtn = document.getElementById("delete-project");
-    deleteBtn.addEventListener("click", () => {
-      Project.deleteProject(id);
+  content.innerHTML = `
+    <div>
+      <h1>${project.name}</h1>
+      <span>${project.date}</span>
+      <button id="delete-project">delete</button>
+      <button id="edit-project">edit</button>
+    </div>
 
-      renderProjects();
-      content.innerHTML = "";
-    });
+    <button id="add-task-btn">
+      Add Task
+    </button>
 
-    const editBtn = document.getElementById("edit-project");
-    editBtn.addEventListener("click", () => {
-      console.log("edit to finish");
-    });
+    <div id="todo-list"></div>
+  `;
+
+  renderProjectTodo(id);
+  console.log(TodoList)
+
+  const deleteBtn = document.getElementById("delete-project");
+  deleteBtn.addEventListener("click", () => {
+    Project.deleteProject(id);
+
+    renderProjects();
+    renderProjectDetails(project, id);
+    content.innerHTML = "";
+  });
+
+  const editBtn = document.getElementById("edit-project");
+  editBtn.addEventListener("click", () => {
+    openProjectEdit(id);
+  });
+}
+
+function openProjectEdit(id) {
+  const dialog = document.createElement("dialog");
+  const project = ProjectList.find((p) => p.id === id);
+
+  dialog.innerHTML = `
+  <h2>Edit Project</h2>
+
+  <label>Project Name</label>
+  <input id="name" type="text" value="${project.name}" />
+  <div>
+    <button type="button" id="submit">Submit</button>
+    <button type="button" id="close-btn">close</button>
+  </div>
+  `;
+
+  document.body.appendChild(dialog);
+  dialog.showModal();
+
+  dialog.querySelector("#submit").addEventListener("click", () => {
+    const name = dialog.querySelector("#name").value;
+
+    Project.editProject(id, name);
+
+    dialog.close();
+    dialog.remove();
+
+    renderProjects();
+
+    renderProjectDetails(project, id);
+  });
+
+  dialog.querySelector("#close-btn").addEventListener("click", () => {
+    dialog.close();
+    dialog.remove();
   });
 }

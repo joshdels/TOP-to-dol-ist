@@ -28,10 +28,8 @@ export class Project {
     }
 
     TodoList = TodoList.filter((todo) => {
-      todo.projectId !== id;
+      return todo.projectId !== id;
     });
-
-    console.log(TodoList)
   }
 }
 
