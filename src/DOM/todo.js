@@ -1,4 +1,5 @@
 import { Todo, TodoList, ProjectList } from "../objects/class.js";
+import { format } from "date-fns";
 
 export function setupNewTask(id) {
   const taskButton = document.querySelector("#add-task-btn");
@@ -35,6 +36,12 @@ function openTaskDialog(id) {
       ${availableProjectsList}
     </select>
 
+    <select id="priority">
+      <option value="high">high</option>
+      <option value="medium">medium</option>
+      <option value="low">low</option>
+    </select>
+
     <div>
       <button type="button" id="add-btn">Add</button>
       <button type="button" id="close-btn">Close</button>
@@ -51,12 +58,21 @@ function openTaskDialog(id) {
   });
 
   dialog.querySelector("#add-btn").addEventListener("click", () => {
+    const projectId = id;
     const name = dialog.querySelector("#name").value;
     const description = dialog.querySelector("#description").value;
-    const projectName = dialog.querySelector("#project-name").value;
-    const projectId = id;
+    const priority = dialog.querySelector("#priority").value;
 
-    const newTask = new Todo(name, description, projectName, projectId);
+    const project = ProjectList.find((p) => p.id === projectId);
+    const projectName = project.name;
+
+    const newTask = new Todo(
+      name,
+      description,
+      projectName,
+      projectId,
+      priority,
+    );
     newTask.storeTodo();
 
     console.log(TodoList);
@@ -81,7 +97,7 @@ export function renderProjectTodo(id) {
     const task = document.createElement("div");
 
     task.innerHTML = `
-    <button data-id="${item.id}">
+    <button class="task-btn" data-id="${item.id}">
       ${item.name}
     </button>
     `;
@@ -106,15 +122,22 @@ export function renderTodoDetails(id) {
   content.innerHTML = "";
 
   content.innerHTML = `
-    <h1>${task.name}</h1>
-    <span>${task.date}</span>
-    <p>${task.description}</p>
-    <p>${task.isDone}</p>
+    <div class="header">
+      <div class="header-top">    
+        <h1>${task.name}</h1>
+        <span>${task.priority}</span>
 
-    <div>
-      <button id="delete-task">delete</button>
-      <button id="edit-task">edit</button>
+        <div>
+          <button id="delete-task">delete</button>
+          <button id="edit-task">edit</button>
+        </div>
+      </div>
+  
+      <p>${format(task.date, "MMM dd, yyyy")}</p>
+      <h2>Project Name: ${task.projectName}</h2>
     </div>
+    <p>${task.description}</p>
+    <p>Status: ${task.isDone ? "Completed" : "Not Completed"} </p>
   `;
 
   const deleteBtn = document.getElementById("delete-task");
@@ -156,6 +179,11 @@ function openTaskEdit(id) {
   <input id="date" type="date" value="${task.date}" />
   <label>Done</label>
   <input id="done" type="checkbox" ${task.isDone ? "checked" : ""} />
+      <select id="priority">
+      <option value="high">high</option>
+      <option value="medium">medium</option>
+      <option value="low">low</option>
+    </select>
   <div>
     <button type="button" id="submit">Submit</button>
     <button type="button" id="close-btn">close</button>
@@ -171,12 +199,22 @@ function openTaskEdit(id) {
     const projectId = dialog.querySelector("#project-id").value;
     const date = dialog.querySelector("#date").value;
     const isDone = dialog.querySelector("#done").value;
+    const priority = dialog.querySelector("#priority").value;
 
-    const project = ProjectList.find((p) => p.id === projectId)
+    const project = ProjectList.find((p) => p.id === projectId);
     const projectName = project.name;
 
     console.log("Edit function");
-    Todo.editTodo(id, name, description, date, projectName, projectId, isDone);
+    Todo.editTodo(
+      id,
+      name,
+      description,
+      date,
+      projectName,
+      projectId,
+      isDone,
+      priority,
+    );
 
     dialog.close();
     dialog.remove();

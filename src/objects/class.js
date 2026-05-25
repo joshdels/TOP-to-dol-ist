@@ -34,7 +34,7 @@ export class Project {
 }
 
 export class Todo {
-  constructor(name, description, projectName, projectId) {
+  constructor(name, description, projectName, projectId, priority) {
     this.id = crypto.randomUUID();
     this.name = name;
     this.date = format(new Date(), "yyyy-MM-dd");
@@ -42,6 +42,7 @@ export class Todo {
     this.projectName = projectName;
     this.projectId = projectId;
     this.isDone = false;
+    this.priority = priority;
   }
 
   storeTodo() {
@@ -56,6 +57,7 @@ export class Todo {
     newProject,
     newProjectId,
     isDone,
+    priority,
   ) {
     const index = TodoList.findIndex((p) => p.id === id);
     const todoItem = TodoList[index];
@@ -66,6 +68,7 @@ export class Todo {
       todoItem.project = newProject;
       todoItem.projectId = newProjectId;
       todoItem.isDone = isDone;
+      todoItem.priority = priority;
     }
   }
 

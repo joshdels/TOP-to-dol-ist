@@ -1,0 +1,108 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  display: flex;
+}
+
+aside {
+  flex: 1;
+  border: 1px solid black;
+  min-height: 100vh;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+#content {
+  flex: 4;
+  padding: 2rem;
+}
+
+dialog {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  text-align: start;
+  gap: 0.5rem;
+}
+
+#projects {
+  border-top: 1px solid black;
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.project-btn {
+  width: 100%;
+}
+
+#content {
+  display: flex;
+  flex-direction: column;
+}
+
+#content .header {
+  border-bottom: 1px solid black;
+}
+
+#content .header h1 {
+  padding: 0;
+  margin: 0;
+}
+
+#content .header h2 {
+  margin: 0.5rem 0 0.2rem;
+  font-size: 1.2rem;
+}
+
+#content .header .header-top {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
+#content .header .header-top span {
+  background-color: rgb(221, 214, 205);
+  padding: 0.5rem;
+}
+
+.project-container {
+  max-width: 400px;
+  margin: 1rem 0;
+}
+
+#add-task-btn {
+  max-width: 200px;
+}
+
+#todo-list {
+  padding: 2rem 0;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+#todo-list .task-btn {
+  background-color: white;
+  color: black;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+#todo-list .task-btn::before {
+  content: "• ";
+}
+#todo-list .task-btn:hover {
+  color: blue;
+}

@@ -15,7 +15,7 @@ export function renderProjects() {
     const project = document.createElement("div");
 
     project.innerHTML = `
-      <button data-id="${item.id}">
+      <button class="project-btn" data-id="${item.id}">
         ${item.name}
       </button>
     `;
@@ -92,7 +92,7 @@ function renderProjectDetails(project, id) {
   const content = document.querySelector("#content");
 
   content.innerHTML = `
-    <div>
+    <div class="project-container">
       <h1>${project.name}</h1>
       <span>${project.date}</span>
       <button id="delete-project">delete</button>
@@ -107,7 +107,7 @@ function renderProjectDetails(project, id) {
   `;
 
   renderProjectTodo(id);
-  console.log(TodoList)
+  console.log(TodoList);
 
   const deleteBtn = document.getElementById("delete-project");
   deleteBtn.addEventListener("click", () => {
@@ -153,6 +153,7 @@ function openProjectEdit(id) {
     renderProjects();
 
     renderProjectDetails(project, id);
+    setupNewTask(id);
   });
 
   dialog.querySelector("#close-btn").addEventListener("click", () => {
